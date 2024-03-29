@@ -12,6 +12,7 @@ function getSettings() {
     const defaultSettings = {
         NMSPORT: 8200,  // Port for Node-Media-Server
         APPPORT: 8300,  // Port for Express app
+        APPHOST: "localhost",
     }
    
     const settingsPath = path.join(__dirname, 'settings.json');
