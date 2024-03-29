@@ -96,7 +96,7 @@ app.get('/stop-stream', (req, res) => {
 
 // Endpoint to trigger dump stream
 app.get('/trigger-dump', (req, res) => {
-    const dumpArgs = ['-re', '-i', 'E:/dump.mp4', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
+    const dumpArgs = ['-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
     startFfmpegProcess(dumpArgs, res, 'Dump video streaming started');
 });
 
