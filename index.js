@@ -101,6 +101,10 @@ app.get('/trigger-dump', (req, res) => {
     startFfmpegProcess(dumpArgs, res, 'Dump video streaming started');
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const appPort = getSettings().APPPORT;
 const appHost = getSettings().APPHOST;
 app.listen(appPort, appHost, () => {

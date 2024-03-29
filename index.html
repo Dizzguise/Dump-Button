@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streaming Control Panel</title>
+    <style>
+        body {
+            background-color: #333333;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+        }
+        .button {
+            background-color: #555555;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Streaming Control Panel</h2>
+    <button class="button" onclick="startLive()">Start Live Stream</button>
+    <button class="button" onclick="stopStream()">Stop All Streams</button>
+    <button class="button" onclick="triggerDump()">Trigger Dump Video</button>
+    <button class="button" onclick="resumeLive()">Resume Live Stream</button>
+
+    <script>
+        const SERVER_URL = 'http://localhost:8300';
+
+        async function sendRequest(endpoint, successMessage, errorMessage) {
+            try {
+                const response = await fetch(`${SERVER_URL}/${endpoint}`);
+                if (response.status_code === 200) {
+                    alert(successMessage);
+                } else {
+                    alert(`${errorMessage}: ${await response.text()}`);
+                }
+            } catch (error) {
+                alert(`${errorMessage}: ${error}`);
+            }
+        }
+
+        function startLive() {
+            sendRequest('start-live', 'Live streaming started successfully.', 'Failed to start live streaming');
+        }
+
+        function stopStream() {
+            sendRequest('stop-stream', 'All streams stopped successfully.', 'Failed to stop streams');
+        }
+
+        function triggerDump() {
+            sendRequest('trigger-dump', 'Dump video streaming started successfully.', 'Failed to start dump video streaming');
+        }
+
+        function resumeLive() {
+            sendRequest('resume-live', 'Live streaming resumed successfully.', 'Failed to resume live streaming');
+        }
+    </script>
+</body>
+</html>
