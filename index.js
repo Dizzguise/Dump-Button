@@ -1,10 +1,28 @@
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
 const NodeMediaServer = require('node-media-server');
+
 const express = require('express');
 const { spawn } = require('child_process');
 
+dotenv.config();
+
+function getSettings() {
+    const defaultSettings = {
+        NMSPORT: 8200,  // Port for Node-Media-Server
+        APPPORT: 8300,  // Port for Express app
+    }
+   
+    const settingsPath = path.join(__dirname, 'settings.json');
+    const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+
+    const mergedSettings = { ...defaultSettings, ...process.env, ...settings };    
+
+    return mergedSettings;
+}
+
 const app = express();
-const nmsPort = 8200; // Port for Node-Media-Server
-const appPort = 8300; // Port for Express app
 
 // Node-Media-Server configuration
 const config = {
@@ -16,7 +34,7 @@ const config = {
         ping_timeout: 30
     },
     http: {
-        port: nmsPort, // Ensure this matches the nmsPort variable
+        port: getSettings().NMSPORT, // Ensure this matches the nmsPort variable
         mediaroot: './media',
         allow_origin: '*'
     }
@@ -61,7 +79,7 @@ function startFfmpegProcess(args, res, message) {
 
 // Endpoint to start live streaming
 app.get('/start-live', (req, res) => {
-    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', 'rtmp://a.rtmp.youtube.com/live2/rfwa-hmej-dwu9-5cym-0qh9'];
+    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
     startFfmpegProcess(liveArgs, res, 'Live streaming started');
 });
 
@@ -73,10 +91,12 @@ app.get('/stop-stream', (req, res) => {
 
 // Endpoint to trigger dump stream
 app.get('/trigger-dump', (req, res) => {
-    const dumpArgs = ['-re', '-i', 'E:/dump.mp4', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', 'rtmp://a.rtmp.youtube.com/live2/rfwa-hmej-dwu9-5cym-0qh9'];
+    const dumpArgs = ['-re', '-i', 'E:/dump.mp4', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
     startFfmpegProcess(dumpArgs, res, 'Dump video streaming started');
 });
 
-app.listen(appPort, () => {
-    console.log(`Express server running at http://localhost:${appPort}`);
+const appPort = getSettings().APPPORT;
+const appHost = getSettings().APPHOST;
+app.listen(appPort, appHost, () => {
+    console.log(`Express server running at http://${appHost}:${appPort}`);
 });
