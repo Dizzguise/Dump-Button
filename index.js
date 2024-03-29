@@ -83,6 +83,11 @@ app.get('/start-live', (req, res) => {
     startFfmpegProcess(liveArgs, res, 'Live streaming started');
 });
 
+app.get('/resume-live', (req, res) => {
+    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
+    startFfmpegProcess(liveArgs, res, 'Live streaming resumed');
+});
+
 // Endpoint to stop all streams
 app.get('/stop-stream', (req, res) => {
     terminateFfmpegProcess();
