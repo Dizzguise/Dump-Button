@@ -15,8 +15,6 @@ Installation
 Python Dependencies
 Install the required Python package by running:
 
-sh
-Copy code
 pip install -r requirements.txt
 Node.js and Node-Media-Server
 Install Node.js from here. This will also install npm, which is needed to install Node packages.
@@ -25,8 +23,6 @@ Clone or download the Node-Media-Server from its GitHub repository.
 
 Navigate to the Node-Media-Server directory and run:
 
-sh
-Copy code
 npm install
 This will install all the necessary Node.js dependencies for the media server.
 
@@ -43,15 +39,14 @@ Media Server: Configure your media server (if using Node-Media-Server, the confi
 Running the Application
 Start the Node.js server (which includes the media server) by navigating to its directory and running:
 
-sh
-Copy code
+
 node streamserver.js
 Run the Python script to start the UI:
 
-sh
-Copy code
+
 python DB1.0.py
 Configure OBS to stream to your media server's RTMP address (e.g., rtmp://localhost/live).
+
 
 Usage
 Start Live Stream: Begins streaming from OBS to the configured destination (e.g., YouTube).
@@ -60,6 +55,7 @@ Trigger Dump Video: Switches the stream to the pre-recorded dump video.
 Resume Live Stream: Returns to streaming live content from OBS.
 Contributing
 Contributions to this project are welcome! Please fork the repository and submit a pull request with your changes.
+
 
 License
 This project is open-source and available under the MIT License.
