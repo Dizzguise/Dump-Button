@@ -23,39 +23,168 @@
     <h2>Streaming Control Panel</h2>
     <button class="button" onclick="startLive()">Start Live Stream</button>
     <button class="button" onclick="stopStream()">Stop All Streams</button>
-    <button class="button" onclick="triggerDump()">Trigger Dump Video</button>
-    <button class="button" onclick="resumeLive()">Resume Live Stream</button>
-
+    <button class="button" onclick="dumpStream()">Trigger Dump Video</button>
+    <button class="button" onclick="test()">Test</button>
     <script>
-        const SERVER_URL = 'http://localhost:8300';
+        /* note, it's normally expected to use a bundler to build this file, but I woke up to day and chose violence */
+        /* Complete promise.rpc.protocol file */
+        const PromiseRPCProtocol = (function() {
+            var NOP = function () {};
 
-        async function sendRequest(endpoint, successMessage, errorMessage) {
-            try {
-                const response = await fetch(`${SERVER_URL}/${endpoint}`);
-                if (response.status_code === 200) {
-                    alert(successMessage);
-                } else {
-                    alert(`${errorMessage}: ${await response.text()}`);
-                }
-            } catch (error) {
-                alert(`${errorMessage}: ${error}`);
+            function randomId() {
+            return (((1 << 24) * Math.random()) | 0).toString(16);
             }
-        }
+
+            function PromiseRPCProtocol(handler) {
+            var self = this;
+
+            self.requests = {};
+            self.TIMEOUT = 5000;
+
+            self.onMessage = NOP;
+            self.onDispatch = NOP;
+
+            if (typeof handler !== "function") {
+                var fns = handler;
+                self.handler = function (req) {      
+                if (typeof fns[req.name] === "function" && req.args !== null) {
+                    var result = fns[req.name].apply(self, req.args);
+                    return result;
+                } else {
+                    self.onMessage("error", { type: "badrequest", req: req });
+                }
+                };
+            } else {
+                self.handler = handler;
+            }
+            }
+
+            PromiseRPCProtocol.prototype.destroy = function () {
+            var self = this;
+
+            self._write = NOP;
+            self.onMessage = NOP;
+            self.onDispatch = NOP;
+
+            delete self.handler;
+            Object.keys(self.requests).forEach(function (key) {
+                self.requests[key].reject("destroyed");
+                clearTimeout(self.requests[key].handle);
+                delete self.requests[key];
+            });
+
+            delete self.requests;
+            };
+
+            PromiseRPCProtocol.prototype.randomId = randomId;
+
+            PromiseRPCProtocol.prototype.validateId = function (id) {
+            return !!this.requests[id];
+            };
+
+            PromiseRPCProtocol.prototype.dispatch = function (buffer) {
+            var self = this;
+
+            if (buffer.action) {
+                var action = buffer.action;
+                var id = buffer.id;
+                var value = buffer.value;
+                var reason = buffer.reason;
+
+                if (action === "execute") {
+                self.handler &&
+                    typeof self.handler === "function" &&
+                    self.handler(buffer);
+                } else if (action === "request") {
+                if (self.handler && typeof self.handler === "function") {
+                    Promise.resolve(this.handler(buffer))
+                    .then(function (value) {
+                        self.resolve(id, value);
+                    })
+                    .catch(function (reason) {
+                        self.reject(id, reason);
+                    });
+                }
+                } else if (action === "resolve") {
+                if (self.validateId(id)) {
+                    clearTimeout(self.requests[id].handle);
+                    self.requests[id].resolve(value);
+                    delete self.requests[id];
+                }
+                } else if (action === "reject" && self.validateId(id)) {
+                clearTimeout(self.requests[id].handle);
+                self.requests[id].reject(reason);
+                delete self.requests[id];
+                }
+            }
+            };
+
+            // an 'execute' does not expect any result
+            PromiseRPCProtocol.prototype.execute = function (fn, args) {
+            this.onDispatch({ action: "execute", name: fn, args: args });
+            };
+
+            PromiseRPCProtocol.prototype.createRequest = function () {
+            var self = this;
+
+            var id = self.randomId();
+
+            var requests = self.requests;
+            var request = (self.requests[id] = {});
+
+            request.handle = setTimeout(function () {
+                request.reject("timeout");
+                delete requests[id];
+            }, self.TIMEOUT);
+
+            return {
+                promise: new Promise(function (resolve, reject) {
+                Object.assign(request, { resolve: resolve, reject: reject });
+                }),
+                id: id,
+            };
+            };
+
+            // a 'request' expects a response from the server, and will return that to you as a promise, note this promise can fail due to timeout
+            PromiseRPCProtocol.prototype.request = function (fn, args) {
+            var request = this.createRequest();
+            // TODO: forward timeout for id to opposite end?
+            this.onDispatch({ action: "request", id: request.id, name: fn, args: args });
+            return request.promise;
+            };
+
+            PromiseRPCProtocol.prototype.resolve = function (id, value) {
+            this.onDispatch({ action: "resolve", id: id, value: value });
+            };
+
+            PromiseRPCProtocol.prototype.reject = function (id, reason) {
+            this.onDispatch({ action: "reject", id: id, reason: reason });
+            };
+            
+            return PromiseRPCProtocol;
+        })();
+    </script>
+    <script>
+        const rpcConn = new PromiseRPCProtocol();
+        rpcConn.onDispatch = (message) => {
+            console.log({rpc: message});
+            electronAPI.sendMessage('rpc', message);
+        };
+
+        electronAPI.receiveMessage('rpc', (event, arg) => {
+            rpcConn.dispatch(arg);
+        });
 
         function startLive() {
-            sendRequest('start-live', 'Live streaming started successfully.', 'Failed to start live streaming');
+            rpcConn.request('startLive');
         }
 
         function stopStream() {
-            sendRequest('stop-stream', 'All streams stopped successfully.', 'Failed to stop streams');
+            rpcConn.request('stopStream');
         }
 
-        function triggerDump() {
-            sendRequest('trigger-dump', 'Dump video streaming started successfully.', 'Failed to start dump video streaming');
-        }
-
-        function resumeLive() {
-            sendRequest('resume-live', 'Live streaming resumed successfully.', 'Failed to resume live streaming');
+        function dumpStream() {
+            rpcConn.request('dumpStream');            
         }
     </script>
 </body>

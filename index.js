@@ -1,112 +1,83 @@
-const fs = require('fs');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const dotenv = require('dotenv');
-const NodeMediaServer = require('node-media-server');
+const url = require('url');
 
-const express = require('express');
-const { spawn } = require('child_process');
+const { logger } = require('./logger');
+const { getSettings } = require('./settings');
 
-dotenv.config();
+const { PromiseRPCProtocol } = require('promise.rpc');
+const { terminateFfmpegProcess, startFfmpegProcess } = require('./stream_utils');
+const { nms } = require('./rtmp_relay');
 
-function getSettings() {
-    const defaultSettings = {
-        NMSPORT: 8200,  // Port for Node-Media-Server
-        APPPORT: 8300,  // Port for Express app
-        APPHOST: "localhost",
-    }
-   
-    const settingsPath = path.join(__dirname, 'settings.json');
-    const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
-
-    const mergedSettings = { ...defaultSettings, ...process.env, ...settings };    
-
-    return mergedSettings;
-}
-
-const app = express();
-
-// Node-Media-Server configuration
-const config = {
-    rtmp: {
-        port: 1935,
-        chunk_size: 60000,
-        gop_cache: true,
-        ping: 60,
-        ping_timeout: 30
-    },
-    http: {
-        port: getSettings().NMSPORT, // Ensure this matches the nmsPort variable
-        mediaroot: './media',
-        allow_origin: '*'
-    }
-};
-
-const nms = new NodeMediaServer(config);
 nms.run();
 
-let ffmpegProcess = null;
-
-function terminateFfmpegProcess() {
-    if (ffmpegProcess) {
-        console.log('Terminating FFmpeg process...');
-        ffmpegProcess.stdin.write('q'); // Gracefully quit FFmpeg
-        ffmpegProcess.stdin.end();
-        ffmpegProcess = null;
-    }
-}
-
-function startFfmpegProcess(args, res, message) {
-    terminateFfmpegProcess(); // Ensure any existing process is terminated
-
-    ffmpegProcess = spawn('ffmpeg', args, { stdio: ['pipe', 'pipe', 'pipe'] });
-
-    ffmpegProcess.stderr.on('data', (data) => {
-        console.error(`FFmpeg stderr: ${data}`);
-    });
-
-    ffmpegProcess.on('close', (code) => {
-        console.log(`${message} terminated with code ${code}`);
-        ffmpegProcess = null;
-    });
-
-    ffmpegProcess.on('error', (err) => {
-        console.error('Failed to start FFmpeg process:', err);
-        res.status(500).send('Failed to start FFmpeg process.');
-    });
-
-    console.log(message);
-    res.send(message);
-}
-
-// Endpoint to start live streaming
-app.get('/start-live', (req, res) => {
-    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
-    startFfmpegProcess(liveArgs, res, 'Live streaming started');
-});
-
-app.get('/resume-live', (req, res) => {
-    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
-    startFfmpegProcess(liveArgs, res, 'Live streaming resumed');
-});
-
-// Endpoint to stop all streams
-app.get('/stop-stream', (req, res) => {
-    terminateFfmpegProcess();
-    res.send('All streams stopped.');
-});
-
-// Endpoint to trigger dump stream
-app.get('/trigger-dump', (req, res) => {
+const streamActions = {
+  async startLive() {
+    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
+    logger.info({'action': 'startLive', args:[...liveArgs, 'STREAMURI']});
+    liveArgs.push(getSettings().STREAMURI);
+    await terminateFfmpegProcess();
+    await startFfmpegProcess(liveArgs);
+  },
+  async stopStream() {
+    logger.info({'action': 'stopStream'});
+    await terminateFfmpegProcess();
+  },
+  async triggerDump() {
     const dumpArgs = ['-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
-    startFfmpegProcess(dumpArgs, res, 'Dump video streaming started');
+    logger.info({'action': 'triggerDump', args:[...dumpArgs, 'STREAMURI']});
+    dumpArgs.push(getSettings().STREAMURI);
+    await terminateFfmpegProcess();
+    await startFfmpegProcess(dumpArgs);
+  }    
+};
+
+
+let mainWindow;
+/* NOTE: this is only designed to one renderer, and will break with multiple  */
+const apiServer = new PromiseRPCProtocol(streamActions);
+
+apiServer.onDispatch = (message) => {
+  mainWindow.webContents.send('rpc', message);
+};
+ipcMain.on('rpc', function(event, arg) {
+  console.log({args: arguments})
+  apiServer.dispatch(arg);
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
+  mainWindow.on('closed', function () {
+    mainWindow = null;
+  });
+}
+
+
+app.on('ready', createWindow);
+
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
-const appPort = getSettings().APPPORT;
-const appHost = getSettings().APPHOST;
-app.listen(appPort, appHost, () => {
-    console.log(`Express server running at http://${appHost}:${appPort}`);
+
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
