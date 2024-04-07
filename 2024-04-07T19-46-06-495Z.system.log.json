@@ -1,0 +1,2 @@
+{"level":30,"time":1712519167916,"pid":43216,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519167917,"pid":43216,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}

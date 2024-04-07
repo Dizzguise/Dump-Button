@@ -1,0 +1,33 @@
+{"level":30,"time":1712519185724,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519185725,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712519207261,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"dumpStream","args":["-i","E:/dump.mp4","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519207261,"pid":43496,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712519207381,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519207381,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1712519208840,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519249670,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519249670,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712519271917,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"dumpStream","args":["-i","E:/dump.mp4","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519271918,"pid":43496,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712519271982,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519271982,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1712519273226,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519277773,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519277773,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712519306447,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519343247,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519343248,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712519370669,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"dumpStream","args":["-i","E:/dump.mp4","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519370670,"pid":43496,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712519370763,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519370763,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1712519372103,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519399282,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519399283,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712519434632,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"dumpStream","args":["-i","E:/dump.mp4","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712519434632,"pid":43496,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712519434743,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519434744,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1712519436082,"pid":43496,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712519452422,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"stopStream"}
+{"level":30,"time":1712519452422,"pid":43496,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}

@@ -1,0 +1,13 @@
+{"level":30,"time":1712514567389,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712514567390,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712514603535,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"triggerDump","args":["-re","-i","E:/dump.mp4","-acodec","copy","-vcodec","copy","-f","flv","rtmp://a.rtmp.youtube.com/live2/9vxc-ktvd-j636-sb1z-14av","STREAMURI"]}
+{"level":30,"time":1712514603535,"pid":22148,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712514603678,"pid":22148,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712514603678,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1712514603853,"pid":22148,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":1}
+{"level":30,"time":1712514614652,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
+{"level":30,"time":1712514614652,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
+{"level":30,"time":1712514653383,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"stopStream"}
+{"level":30,"time":1712514653383,"pid":22148,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1712514653472,"pid":22148,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1712514653472,"pid":22148,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
