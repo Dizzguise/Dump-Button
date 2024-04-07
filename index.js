@@ -23,9 +23,9 @@ const streamActions = {
     logger.info({'action': 'stopStream'});
     await terminateFfmpegProcess();
   },
-  async triggerDump() {
-    const dumpArgs = ['-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv', getSettings().STREAMURI];
-    logger.info({'action': 'triggerDump', args:[...dumpArgs, 'STREAMURI']});
+  async dumpStream() {
+    const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
+    logger.info({'action': 'dumpStream', args:[...dumpArgs, 'STREAMURI']});
     dumpArgs.push(getSettings().STREAMURI);
     await terminateFfmpegProcess();
     await startFfmpegProcess(dumpArgs);
