@@ -1,6 +1,0 @@
-{"level":30,"time":1712511345987,"pid":42644,"hostname":"DESKTOP-KSKRNNR","action":"startLive","args":["-i","rtmp://localhost/live","-acodec","copy","-vcodec","copy","-f","flv","STREAMURI"]}
-{"level":30,"time":1712511345988,"pid":42644,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
-{"level":30,"time":1712511402227,"pid":42644,"hostname":"DESKTOP-KSKRNNR","action":"stopStream"}
-{"level":30,"time":1712511402228,"pid":42644,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
-{"level":30,"time":1712511402261,"pid":42644,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
-{"level":30,"time":1712511402261,"pid":42644,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
