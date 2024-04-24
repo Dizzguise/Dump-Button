@@ -14,11 +14,14 @@ nms.run();
 const ffmpegYoutube = ffmpegProcessFactory();
 const ffmpegRumble = ffmpegProcessFactory();
 
+const  delay = (n) => new Promise(r => setTimeout(r, n));
+
 const streamActions = {
   async startYoutube() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().YOUTUBEURI);
     await ffmpegYoutube.terminateFfmpegProcess();
+    await delay(getSettings().SWITCHDELAY);
     await ffmpegYoutube.startFfmpegProcess(liveArgs);
   },
   async stopYoutube() {
@@ -28,6 +31,7 @@ const streamActions = {
     const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     dumpArgs.push(getSettings().YOUTUBEURI);
     await ffmpegYoutube.terminateFfmpegProcess();
+    await delay(getSettings().SWITCHDELAY);
     await ffmpegYoutube.startFfmpegProcess(dumpArgs);
   },
 
@@ -35,6 +39,7 @@ const streamActions = {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().RUMBLEURI);
     await ffmpegRumble.terminateFfmpegProcess();
+    await delay(getSettings().SWITCHDELAY);
     await ffmpegRumble.startFfmpegProcess(liveArgs);
   },
   async stopRumble() {
@@ -44,12 +49,12 @@ const streamActions = {
     const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     dumpArgs.push(getSettings().RUMBLEURI);
     await ffmpegRumble.terminateFfmpegProcess();
+    await delay(getSettings().SWITCHDELAY);
     await ffmpegRumble.startFfmpegProcess(dumpArgs);
   },
 };
 
 module.exports = streamActions;
-
 
 let mainWindow;
 /* NOTE: this is only designed to one renderer, and will break with multiple  */

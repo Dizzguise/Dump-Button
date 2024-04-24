@@ -17,5 +17,21 @@
   },
   "devDependencies": {
     "electron": "^29.1.6"
+  },
+  "build": {
+    "appId": "button.dump",
+    "productName": "DumpButton",
+    "mac": {
+      "target": "dmg",
+      "icon": "icons/mac/icon.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icons/win/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icons/png/"
+    }
   }
 }
