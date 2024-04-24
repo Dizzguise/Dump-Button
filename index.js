@@ -18,6 +18,7 @@ const streamActions = {
   async startYoutube() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().YOUTUBEURI);
+    await ffmpegYoutube.terminateFfmpegProcess();
     await ffmpegYoutube.startFfmpegProcess(liveArgs);
   },
   async stopYoutube() {
@@ -33,6 +34,7 @@ const streamActions = {
   async startRumble() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().RUMBLEURI);
+    await ffmpegRumble.terminateFfmpegProcess();
     await ffmpegRumble.startFfmpegProcess(liveArgs);
   },
   async stopRumble() {
