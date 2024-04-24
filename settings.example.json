@@ -2,6 +2,7 @@
     "NMSPORT": 8200,
     "APPPORT": 8300,
     "APPHOST": "localhost",
+    "SWITCHDELAY": 500,
     "YOUTUBEURI": "youtube.mp4",
     "RUMBLEURI": "rumble.mp4",
     "DUMPVIDEO": "dumpvid.mp4"
