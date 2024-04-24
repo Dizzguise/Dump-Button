@@ -8,6 +8,18 @@
             background-color: #333333;
             color: #FFFFFF;
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-bottom: 20px;
         }
         .button {
             background-color: #555555;
@@ -17,14 +29,27 @@
             border: none;
             cursor: pointer;
         }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 <body>
     <h2>Streaming Control Panel</h2>
-    <button class="button" onclick="startLive()">Start Live Stream</button>
-    <button class="button" onclick="stopStream()">Stop All Streams</button>
-    <button class="button" onclick="dumpStream()">Trigger Dump Video</button>
-    <button class="button" onclick="test()">Test</button>
+    <div class="controls">
+        <div class="control-group">
+            <button class="button" onclick="startYoutube()">Start YouTube</button>
+            <button class="button" onclick="dumpYoutube()">Dump YouTube</button>
+            <button class="button" onclick="stopYoutube()">Stop YouTube</button>
+        </div>
+        <div class="control-group">
+            <button class="button" onclick="startRumble()">Start Rumble</button>
+            <button class="button" onclick="dumpRumble()">Dump Rumble</button>
+            <button class="button" onclick="stopRumble()">Stop Rumble</button>
+        </div>
+    </div>
+    <button class="button" onclick="stopAllStreams()">Stop All Streams</button>
     <script>
         /* note, it's normally expected to use a bundler to build this file, but I woke up to day and chose violence */
         /* Complete promise.rpc.protocol file */
@@ -175,17 +200,73 @@
             rpcConn.dispatch(arg);
         });
 
-        function startLive() {
-            rpcConn.request('startLive');
+         function startYoutube() {
+            rpcConn.request('startYoutube');
+            toggleButtons('youtube', true);
         }
 
-        function stopStream() {
-            rpcConn.request('stopStream');
+        function stopYoutube() {
+            rpcConn.request('stopYoutube');
+            toggleButtons('youtube', false);
         }
 
-        function dumpStream() {
-            rpcConn.request('dumpStream');            
+        function dumpYoutube() {
+            rpcConn.request('dumpYoutube');
+            toggleButtons('youtube', 'dump');
         }
+
+        function resumeYoutube() {
+            rpcConn.request('startYoutube');
+            toggleButtons('youtube', true);
+        }
+
+        function startRumble() {
+            rpcConn.request('startRumble');
+            toggleButtons('rumble', true);
+        }
+
+        function stopRumble() {
+            rpcConn.request('stopRumble');
+            toggleButtons('rumble', false);
+        }
+
+        function dumpRumble() {
+            rpcConn.request('dumpRumble');
+            toggleButtons('rumble', 'dump');
+        }
+
+        function resumeRumble() {
+            rpcConn.request('startRumble');
+            toggleButtons('rumble', true);
+        }
+
+        function stopAllStreams() {
+            stopYoutube();
+            stopRumble();
+        }
+
+        function toggleButtons(stream, mode) {
+        const startButton = document.querySelector(`button[data-stream="${stream}"][data-mode="start"]`);
+        const stopButton = document.querySelector(`button[data-stream="${stream}"][data-mode="stop"]`);
+        const dumpButton = document.querySelector(`button[data-stream="${stream}"][data-mode="dump"]`);
+
+        if (mode === true) {
+            // Stream is active, hide start button, show stop button
+            startButton.style.display = 'none';
+            stopButton.style.display = 'inline-block';
+            dumpButton.style.display = 'none'; // Hide dump button when streaming
+        } else if (mode === false) {
+            // Stream is stopped, hide stop button, show start button
+            startButton.style.display = 'inline-block';
+            stopButton.style.display = 'none';
+            dumpButton.style.display = 'none'; // Hide dump button when stopped
+        } else if (mode === 'dump') {
+            // Stream is being dumped, hide both start and stop buttons, show dump button
+            startButton.style.display = 'none';
+            stopButton.style.display = 'none';
+            dumpButton.style.display = 'inline-block';
+        }
+    }
     </script>
 </body>
 </html>

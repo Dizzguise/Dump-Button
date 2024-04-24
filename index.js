@@ -12,25 +12,37 @@ const { nms } = require('./rtmp_relay');
 nms.run();
 
 const streamActions = {
-  async startLive() {
+  async startYoutube() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
-    logger.info({'action': 'startLive', args:[...liveArgs, 'STREAMURI']});
-    liveArgs.push(getSettings().STREAMURI);
-    await terminateFfmpegProcess();
-    await startFfmpegProcess(liveArgs);
+    liveArgs.push(getSettings().YOUTUBEURI);
+    await startFfmpegProcess(liveArgs, 'youtube-live'); // Ensure the correct ID is used
   },
-  async stopStream() {
-    logger.info({'action': 'stopStream'});
-    await terminateFfmpegProcess();
+  async stopYoutube() {
+    await terminateFfmpegProcess('youtube-live', 'youtube-dump'); // Ensure the correct ID is used
   },
-  async dumpStream() {
+  async dumpYoutube() {
     const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
-    logger.info({'action': 'dumpStream', args:[...dumpArgs, 'STREAMURI']});
-    dumpArgs.push(getSettings().STREAMURI);
-    await terminateFfmpegProcess();
-    await startFfmpegProcess(dumpArgs);
-  }    
+    dumpArgs.push(getSettings().YOUTUBEURI);
+    await this.stopYoutube('youtube-live')
+    await startFfmpegProcess(dumpArgs, 'youtube-dump'); // Ensure the correct ID is used
+  },
+  async startRumble() {
+    const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
+    liveArgs.push(getSettings().RUMBLEURI);
+    await startFfmpegProcess(liveArgs, 'rumble-live'); // Ensure the correct ID is used
+  },
+  async stopRumble() {
+    await terminateFfmpegProcess('rumble-live', 'rumble-dump'); // Ensure the correct ID is used
+  },
+  async dumpRumble() {
+    const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
+    dumpArgs.push(getSettings().RUMBLEURI);
+    await this.stopRumble('rumble-live')
+    await startFfmpegProcess(dumpArgs, 'rumble-dump'); // Ensure the correct ID is used
+  },
 };
+
+module.exports = streamActions;
 
 
 let mainWindow;

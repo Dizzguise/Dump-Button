@@ -29,7 +29,7 @@ function terminateFfmpegProcess() {
   });
 }
 
-function startFfmpegProcess(args) {
+function startFfmpegProcess(args,) {
   ffmpegProcess = spawn('ffmpeg', args, { stdio: ['pipe', 'pipe', 'pipe'] });
 
   // ffmpegProcess.stderr.on('data', (data) => {

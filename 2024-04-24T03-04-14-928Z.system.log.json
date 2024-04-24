@@ -1,0 +1,6 @@
+{"level":30,"time":1713927918345,"pid":22724,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1713927918573,"pid":22724,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1713927918574,"pid":22724,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
+{"level":30,"time":1713928267497,"pid":22724,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
+{"level":30,"time":1713928267536,"pid":22724,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
+{"level":30,"time":1713928267536,"pid":22724,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
