@@ -1,6 +1,7 @@
 const path = require('path');
 const dotenv = require('dotenv');
 const fs = require('fs');
+const { logger } = require('./logger');
 
 dotenv.config();
 
@@ -16,5 +17,14 @@ function getSettings() {
 
   return mergedSettings;
 }
+
+
+if (fs.existsSync('./settings.json')) {
+  logger.info({action:'init', msg:'settings found'});
+} else {
+  logger.info({action:'init', msg:'settings not found, creating defaults'}); 
+  fs.writeFileSync('./settings.json', fs.readFileSync("./settings.example.json"));
+}
+
 
 module.exports = { getSettings };
