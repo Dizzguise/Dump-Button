@@ -56,14 +56,8 @@ class FfmpegProcessHandler {
         reject(err);
       });
 
-<<<<<<< HEAD
       this.ffmpegProcess.stdin.write('q');
       this.ffmpegProcess.stdin.end();
-=======
-      ffmpegProcess.stdin.write('q');
-      ffmpegProcess.stdin.end();
-      //ffmpegProcess.child.kill('SIGTERM');
->>>>>>> 51c0759c6a4cb4fc39dad60cda3315c48c73d99e
     });
   }
 }
