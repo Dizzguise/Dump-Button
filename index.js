@@ -6,39 +6,43 @@ const { logger } = require('./logger');
 const { getSettings } = require('./settings');
 
 const { PromiseRPCProtocol } = require('promise.rpc');
-const { terminateFfmpegProcess, startFfmpegProcess } = require('./stream_utils');
+const { ffmpegProcessFactory } = require('./stream_utils');
 const { nms } = require('./rtmp_relay');
 
 nms.run();
+
+const ffmpegYoutube = ffmpegProcessFactory();
+const ffmpegRumble = ffmpegProcessFactory();
 
 const streamActions = {
   async startYoutube() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().YOUTUBEURI);
-    await startFfmpegProcess(liveArgs, 'youtube-live'); // Ensure the correct ID is used
+    await ffmpegYoutube.startFfmpegProcess(liveArgs);
   },
   async stopYoutube() {
-    await terminateFfmpegProcess('youtube-live', 'youtube-dump'); // Ensure the correct ID is used
+    await ffmpegYoutube.terminateFfmpegProcess();
   },
   async dumpYoutube() {
     const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     dumpArgs.push(getSettings().YOUTUBEURI);
-    await this.stopYoutube('youtube-live')
-    await startFfmpegProcess(dumpArgs, 'youtube-dump'); // Ensure the correct ID is used
+    await ffmpegYoutube.terminateFfmpegProcess();
+    await ffmpegYoutube.startFfmpegProcess(dumpArgs);
   },
+
   async startRumble() {
     const liveArgs = ['-i', 'rtmp://localhost/live', '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     liveArgs.push(getSettings().RUMBLEURI);
-    await startFfmpegProcess(liveArgs, 'rumble-live'); // Ensure the correct ID is used
+    await ffmpegRumble.startFfmpegProcess(liveArgs);
   },
   async stopRumble() {
-    await terminateFfmpegProcess('rumble-live', 'rumble-dump'); // Ensure the correct ID is used
+    await ffmpegRumble.terminateFfmpegProcess();
   },
   async dumpRumble() {
     const dumpArgs = ['-stream_loop', '-1', '-re', '-i', getSettings().DUMPVIDEO, '-acodec', 'copy', '-vcodec', 'copy', '-f', 'flv'];
     dumpArgs.push(getSettings().RUMBLEURI);
-    await this.stopRumble('rumble-live')
-    await startFfmpegProcess(dumpArgs, 'rumble-dump'); // Ensure the correct ID is used
+    await ffmpegRumble.terminateFfmpegProcess();
+    await ffmpegRumble.startFfmpegProcess(dumpArgs);
   },
 };
 
