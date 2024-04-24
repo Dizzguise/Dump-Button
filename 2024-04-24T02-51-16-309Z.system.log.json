@@ -1,4 +1,0 @@
-{"level":30,"time":1713927236388,"pid":1564,"hostname":"DESKTOP-KSKRNNR","msg":"Terminating FFmpeg process..."}
-{"level":30,"time":1713927236406,"pid":1564,"hostname":"DESKTOP-KSKRNNR","process":"ffmpeg","action":"terminated","code":0}
-{"level":30,"time":1713927236406,"pid":1564,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"FFmpeg process terminated","code":0}
-{"level":30,"time":1713927264316,"pid":1564,"hostname":"DESKTOP-KSKRNNR","action":"terminated","msg":"No process to terminate"}
