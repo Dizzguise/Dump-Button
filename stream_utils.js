@@ -27,6 +27,7 @@ function ffmpegProcessFactory() {
 
       ffmpegProcess.stdin.write('q');
       ffmpegProcess.stdin.end();
+      ffmpegProcess.child.kill('SIGTERM');
     });
   }
 
