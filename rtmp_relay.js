@@ -17,7 +17,7 @@ const config = {
         allow_origin: '*'
     },
     relay: {
-        ffmpeg: '/usr/local/bin/ffmpeg',
+        ffmpeg: 'ffmpeg',
         tasks: [
             // Initial empty tasks array, will populate dynamically
         ]
