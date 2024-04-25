@@ -1,61 +1,77 @@
-# Dump-ButtonStreaming Management Application
-This application allows you to manage live streams, seamlessly switching between live content from OBS and a pre-recorded dump video. It's designed to output directly to YouTube but can be configured for other streaming platforms.
+Overview
+A dump button, with output for both Youtube and Rumble. *WIP*
+
 
 Features
-Start and stop live streaming from OBS.
-Switch to a pre-recorded dump video without interrupting the stream.
-Resume live streaming after the dump video has played.
-Simple UI built with Tkinter for easy control.
-Requirements
-Python 3.x
-Node.js
-FFmpeg (for stream processing)
-A media server capable of handling RTMP streams (e.g., Node-Media-Server)
+Live RTMP streaming using Node-Media-Server.
+Dynamic stream relay configuration based on stream keys.
+FFmpeg integration for video stream processing and relaying.
+Custom logging with Pino for efficient debugging and monitoring.
+Environment-based configuration management for portability and ease of deployment.
+
+Prerequisites
+Node.js (v14.x or higher recommended)
+FFmpeg installed and available in your system's PATH.
+
 Installation
-Python Dependencies
-Install the required Python package by running:
 
-pip install -r requirements.txt
-Node.js and Node-Media-Server
-Install Node.js from here. This will also install npm, which is needed to install Node packages.
+Clone the Repository
 
-Clone or download the Node-Media-Server from its GitHub repository.
 
-Navigate to the Node-Media-Server directory and run:
+git clone https://github.com/yourgithubusername/your-repository-name.git
+cd your-repository-name
+
+Install Dependencies
 
 npm install
-This will install all the necessary Node.js dependencies for the media server.
 
-FFmpeg
-Ensure FFmpeg is installed and accessible from your system's PATH. Installation instructions for FFmpeg can be found here.
 
+FFmpeg Installation
+
+Ensure FFmpeg is installed on your system. Below are the installation steps for different operating systems:
+
+Windows
+
+Download the FFmpeg builds from FFmpeg Official Site.
+Extract the files to a known location (e.g., C:\FFmpeg).
+Add C:\FFmpeg\bin to your system's PATH.
+Linux
+For Debian-based distributions:
+
+sudo apt update
+sudo apt install ffmpeg
+
+For Red Hat-based distributions:
+
+sudo yum install ffmpeg
+
+macOS
+Using Homebrew:
+
+brew install ffmpeg
 Configuration
-Python Script: No initial configuration needed, but ensure the SERVER_URL variable in the Python script matches the address of your Node.js server.
+Copy the example configuration file and modify it to match your environment settings:
 
-Node.js Server: In the Node.js script (streamserver.js), ensure the ports and any stream keys or paths are correctly set according to your setup.
-
-Media Server: Configure your media server (if using Node-Media-Server, the configuration is in the Node.js script) to accept incoming streams from OBS and to forward them as needed.
-
-Running the Application
-Start the Node.js server (which includes the media server) by navigating to its directory and running:
-
-
-node streamserver.js
-Run the Python script to start the UI:
-
-
-python DB1.0.py
-Configure OBS to stream to your media server's RTMP address (e.g., rtmp://localhost/live).
+cp settings.example.json settings.json
+Edit settings.json to update the settings such as ports and file paths as needed.
 
 
 Usage
-Start Live Stream: Begins streaming from OBS to the configured destination (e.g., YouTube).
-Stop All Streams: Stops all ongoing streams.
-Trigger Dump Video: Switches the stream to the pre-recorded dump video.
-Resume Live Stream: Returns to streaming live content from OBS.
-Contributing
-Contributions to this project are welcome! Please fork the repository and submit a pull request with your changes.
+To start the application, run:
 
+npm start
+This command will launch the Electron application and initiate the Node-Media-Server, listening for incoming RTMP streams.
+
+Development
+Running in Development Mode
+To run the application in development mode:
+
+npm run dev
+Debugging
+Logs are written to the logs directory. Monitor these logs for debugging and operational insights.
+
+Contribution
+Contributions are welcome. Please fork the repository, make your changes, and submit a pull request.
 
 License
-This project is open-source and available under the MIT License.
+This project is licensed under the MIT License. Contributions must adhere to this license.
